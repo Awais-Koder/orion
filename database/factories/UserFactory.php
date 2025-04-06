@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\Manufacturer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,6 +32,10 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+
+            'preferred_country_id' => $this->faker->randomElement([null, Country::factory()]),
+            'company_id' => null,
+            'manufacturer_id' => null,
         ];
     }
 
@@ -40,5 +47,25 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function forCompany(): static
+    {
+        return $this->state(function (array $attributes, Company $company) {
+            return [
+                'manufacturer_id' => null,
+                'company_id' => $company->id,
+            ];
+        });
+    }
+
+    public function forManufacturer(): static
+    {
+        return $this->state(function (array $attributes, Manufacturer $manufacturer) {
+            return [
+                'manufacturer_id' => $manufacturer->id,
+                'company_id' => null,
+            ];
+        });
     }
 }
