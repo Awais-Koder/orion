@@ -46,10 +46,7 @@ class FilterPage extends Component
         } else {
             $this->solutions = Solution::all();
         }
-
         $this->brands = Brand::withCount('products')->get();
-        // $this->loadProperties();
-        dd($this->loadProperties());
     }
     // to load properties for selected ids
     public function loadProperties()
