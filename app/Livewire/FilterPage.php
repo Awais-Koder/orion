@@ -56,32 +56,14 @@ class FilterPage extends Component
     {
         $markerTypeId = $this->decodedMarkerTypeId;
         $categoryId = $this->decodedCategoryId;
-
         // Fetch grouped properties
         $this->propertyGroups = PropertyGroup::with(['properties' => function ($query) use ($markerTypeId, $categoryId) {
-            $query->where('marker_type_id', $markerTypeId)
+            $query->where(['marker_type_id' => $markerTypeId, 'is_filterable' => true])
                 ->when($categoryId, function ($q) use ($categoryId) {
                     $q->where('marker_type_category_id', $categoryId);
                 })
                 ->orderBy('sequence');
-        }])
-            ->where('marker_type_id', $markerTypeId)
-            ->when($categoryId, function ($q) use ($categoryId) {
-                $q->where('marker_type_category_id', $categoryId);
-            })
-            ->orderBy('sequence')
-            ->get();
-
-
-
-        // $this->propertyGroups = PropertyGroup::with('properties')->where(['marker_type_id' => $markerTypeId)->get();
-        dd($this->propertyGroups);
-        // Fetch ungrouped properties
-        // $this->ungroupedProperties = Property::where('marker_type_id', $markerTypeId)
-        //     ->where('is_filterable', true)
-        //     ->whereNull('property_group_id')
-        //     ->orderBy('sequence_filter')
-        //     ->get();
+        }])->get();
     }
     public function render()
     {
