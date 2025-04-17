@@ -29,10 +29,6 @@ class Property extends Model
         'sequence' => 'integer',
         'sequence_filter' => 'integer',
     ];
-    public function getTypeStringAttribute()
-    {
-        return $this->type->value;
-    }
 
     public function markerType()
     {
@@ -58,16 +54,4 @@ class Property extends Model
     {
         return $this->hasMany(PropertyValue::class);
     }
-
-    public function scopeFilterableForMarker($query, $markerTypeId, $categoryId = null)
-{
-    return $query->where('is_filterable', true)
-        ->where('marker_type_id', $markerTypeId)
-        ->when(!is_null($categoryId), function ($q) use ($categoryId) {
-            $q->where('marker_type_category_id', $categoryId);
-        }, function ($q) {
-            $q->whereNull('marker_type_category_id');
-        });
-}
-
 }

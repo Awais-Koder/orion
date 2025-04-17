@@ -2,7 +2,7 @@
     <!-- Main Content -->
     <div class="flex">
         <!-- Sidebar with Filters -->
-        <aside class="w-96 bg-white py-4 shadow-md max-h-[100vh] border-r overflow-y-auto scrollbar-hide">
+        <aside class="w-96 bg-white py-4 shadow-md min-h-[100vh] border-r overflow-y-auto scrollbar-hide">
             <!-- Search -->
             <div class="mb-4 m-2">
                 <input type="text" placeholder="Search" class="w-full p-2 border rounded">
@@ -22,7 +22,7 @@
                 <label class="block text-sm font-medium text-gray-700">Brands</label>
                 <div class="space-y-2">
                     <div class="flex items-center mb-2">
-                        <input type="checkbox" wire:click="$toggle('showAllBrands')" class="mr-2">
+                        <input type="checkbox" class="mr-2">
                         <label class="cursor-pointer">Show all ({{ $brands->count() }})</label>
                     </div>
 
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Fire Resistance Filter -->
-            @for ($i = 0; $i < 5; $i++)
+            {{-- @for ($i = 0; $i < 5; $i++)
             <div class="w-full border-b"></div>
             <div class="mb-4 m-4">
                 <label class="block text-sm font-medium text-gray-700">Fire resistance</label>
@@ -71,7 +71,16 @@
                     <!-- Add more fire resistance options as needed -->
                 </div>
             </div>
-            @endfor
+            @endfor --}}
+            @foreach($filterdData as $group)
+            <div class="w-full border-b"></div>
+                <div class="mb-4 m-4">
+                    <h3>{{ $group->name }}</h3>
+                    @foreach($group->properties as $property)
+                        @include('partials.property-filter', ['property' => $property])
+                    @endforeach
+                </div>
+            @endforeach
             <div class="mb-4 m-4">
                 <button class="text-orange-500">Show more</button>
             </div>
@@ -121,7 +130,7 @@
             <!-- Filter Tags and Reset -->
             <div class="flex justify-between items-center mb-4 border-b py-4">
                 <div class="">
-                    <span class="font-bold px-3 py-1 rounded">{{$solutions->count()}} results</span>
+                    <span class="font-bold px-3 py-1 rounded"> results</span>
                     <span class="text-gray-500 border px-3 py-1 mr-1 ">Fire resistance <button
                         wire:click="resetFilter('fireResistance')" class="cursor-pointer ml-1 font-bold">x</button>
                     </span>
@@ -131,7 +140,7 @@
 
             <!-- Solutions Grid -->
             <div class="grid grid-cols-3 gap-4">
-                @foreach($solutions as $solution)
+                @foreach($group->markerType->solutions as $solution)
                 <div class="bg-white p-4 shadow-md rounded hover:shadow-lg transition-shadow">
                     <img src="https://via.placeholder.com/150" alt="{{ $solution['name'] }}"
                         class="w-full h-32 object-cover mb-2">
