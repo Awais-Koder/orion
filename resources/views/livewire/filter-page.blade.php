@@ -72,7 +72,7 @@
                 </div>
             </div>
             @endfor --}}
-            @foreach($filterdData as $group)
+            @foreach($filteredData as $group)
             <div class="w-full border-b"></div>
                 <div class="mb-4 m-4">
                     <h3>{{ $group->name }}</h3>
@@ -85,7 +85,7 @@
                 <button class="text-orange-500">Show more</button>
             </div>
             <!-- Wall Height Slider -->
-            <div class="w-full border-b"></div>
+            {{-- <div class="w-full border-b"></div>
             <div class="mb-4 m-4">
                 <label class="block text-sm font-medium text-gray-700">Wall height (mm)</label>
                 <div class="flex justify-between">
@@ -95,7 +95,7 @@
             </div>
             <div class="m-4">
                 <input type="range" min="1500" max="2400" wire:model="wallHeight" class="w-full">
-            </div>
+            </div> --}}
         </aside>
 
         <!-- Main Content Area -->
@@ -140,18 +140,30 @@
 
             <!-- Solutions Grid -->
             <div class="grid grid-cols-3 gap-4">
-                @foreach($group->markerType->solutions as $solution)
-                <div class="bg-white p-4 shadow-md rounded hover:shadow-lg transition-shadow">
-                    <img src="https://via.placeholder.com/150" alt="{{ $solution['name'] }}"
-                        class="w-full h-32 object-cover mb-2">
-                    <h3 class="text-lg font-semibold">{{ $solution['name'] }}</h3>
-                    <p class="text-sm text-gray-600">Diameter/dimension: {{ $solution['diameter'] }}</p>
-                    <p class="text-sm text-gray-600">Fire resistance: {{ $solution['fire_resistance'] }}</p>
-                    <button class="mt-2 bg-black text-white px-4 py-2 rounded cursor-pointer"> {{ $solution['name'] }}
-                        →</button>
-                </div>
+                @foreach ($filteredData as $group)
+                    {{-- Access markerType and its solutions --}}
+                    @if ($group->markerType && $group->markerType->solutions->isNotEmpty())
+                    @foreach ($group->markerType->solutions as $solution)
+                    <div class="bg-white p-4 shadow-md rounded hover:shadow-lg transition-shadow">
+                        <img src="https://via.placeholder.com/150" alt="{{ $solution['name'] }}"
+                            class="w-full h-32 object-cover mb-2">
+                        <h3 class="text-lg font-semibold">{{ $solution['name'] }}</h3>
+                        <p class="text-sm text-gray-600">Diameter/dimension: {{ $solution['diameter'] }}</p>
+                        <p class="text-sm text-gray-600">Fire resistance: {{ $solution['fire_resistance'] }}</p>
+                        <button class="mt-2 bg-black text-white px-4 py-2 rounded cursor-pointer"> 
+                            {{ $solution['name'] }} →</button>
+                    </div>
+                    @endforeach
+                    @else
+                    <div class="col-span-3 text-center p-4">
+                        <h2 class="text-xl font-semibold">No results found</h2>
+                        <p class="text-gray-500">Try adjusting your filters or search terms.</p>
+                    </div>
+                    @endif
                 @endforeach
+
             </div>
         </main>
     </div>
 </div>
+

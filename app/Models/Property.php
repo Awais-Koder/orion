@@ -60,14 +60,11 @@ class Property extends Model
     }
 
     public function scopeFilterableForMarker($query, $markerTypeId, $categoryId = null)
-{
-    return $query->where('is_filterable', true)
-        ->where('marker_type_id', $markerTypeId)
-        ->when(!is_null($categoryId), function ($q) use ($categoryId) {
-            $q->where('marker_type_category_id', $categoryId);
-        }, function ($q) {
-            $q->whereNull('marker_type_category_id');
-        });
-}
-
+    {
+        return $query->where('is_filterable', true)
+            ->where('marker_type_id', $markerTypeId)
+            ->when(!is_null($categoryId), function ($q) use ($categoryId) {
+                $q->where('marker_type_category_id', $categoryId);
+            });
+    }
 }

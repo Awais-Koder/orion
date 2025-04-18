@@ -15,25 +15,20 @@ class MarkerTypeService
                     ->orderBy('sequence')
                     ->with(['propertyValues.propertyChoice']);
             },
-            // helepr function for more accessibility
-            'markerType.solutions' => fn($q) => withCategoryOrNull(
+
+            'markerType.solutions' => fn($q) => matchCategoryIfGiven(
                 $q->where('marker_type_id', $markerTypeId),
                 $categoryId
             ),
         ])
             ->where('marker_type_id', $markerTypeId)
-            ->where(function ($query) use ($categoryId) {
-                // helepr function for more accessibility
-                withCategoryOrNull($query, $categoryId);
-            })
+            ->tap(fn($query) => matchCategoryIfGiven($query, $categoryId)) // only add category filter if needed
             ->whereHas('properties', function ($q) use ($markerTypeId, $categoryId) {
-                // using scope here
                 $q->filterableForMarker($markerTypeId, $categoryId);
             })
             ->orderBy('sequence')
             ->get();
 
-        // Limit each property's propertyValues to 5
         foreach ($groups as $group) {
             foreach ($group->properties as $property) {
                 $property->setRelation(

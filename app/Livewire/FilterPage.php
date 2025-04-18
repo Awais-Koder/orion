@@ -14,7 +14,7 @@ use App\Services\MarkerTypeService;
 
 class FilterPage extends Component
 {
-    public $filterdData;
+    public $filteredData;
     public $brands;
     public $showAllBrands = false;
     public $wallHeight = [1500, 2400];
@@ -35,12 +35,13 @@ class FilterPage extends Component
 
     public function mount()
     {
-        $this->filterdData = app(MarkerTypeService::class)->getPropertyGroupsWithFilters(
-            base64_decode($this->markerTypeId ?? ''), 
-            base64_decode($this->categoryId ?? '')
+        $this->filteredData = app(MarkerTypeService::class)->getPropertyGroupsWithFilters(
+            (int) base64_decode($this->markerTypeId ?? ''),
+            $this->categoryId ? (int) base64_decode($this->categoryId) : null
         );
+
         // uncomment to see in debug mode
-        // dd($this->filterdData); 
+        // dd($this->filterdData);
         $this->brands = Brand::all();
     }
     public function render()
