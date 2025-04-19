@@ -16,21 +16,34 @@ class FilterPage extends Component
 {
     public $filteredData;
     public $brands;
+    public $visibleBrandCount = 3;
+    public $visibleChoicesCount = 3;
     public $showAllBrands = false;
-    public $wallHeight = [1500, 2400];
     public $solutions;
     #[Url]
     public ?string $markerTypeId = null;
     #[Url]
     public ?string $categoryId = null;
 
-    public $decodedMarkerTypeId;
-    public $decodedCategoryId;
 
-
+    // to show more brands
     public function getVisibleBrandsProperty()
     {
-        return $this->showAllBrands ? $this->brands : $this->brands->take(3);
+        return $this->brands->take($this->visibleBrandCount);
+    }
+    public function showMoreBrands()
+    {
+        $this->visibleBrandCount += 5;
+    }
+    // end logic for show more brands
+    // to show more choices
+    public function getVisibleChoicesProperty()
+    {
+        return $this->filteredData->take($this->visibleChoicesCount);
+    }
+    public function showMoreChoices()
+    {
+        $this->visibleChoicesCount += 5;
     }
 
     public function mount()
@@ -39,9 +52,7 @@ class FilterPage extends Component
             (int) base64_decode($this->markerTypeId ?? ''),
             $this->categoryId ? (int) base64_decode($this->categoryId) : null
         );
-
-        // uncomment to see in debug mode
-        // dd($this->filterdData);
+        // working pedning
         $this->brands = Brand::all();
     }
     public function render()

@@ -16,4 +16,9 @@ function matchCategoryIfGiven($query, ?int $categoryId)
 
     return $query;
 }
-
+if (!function_exists('formatUnit')) {
+    function formatUnit(?string $unit): string
+    {
+        return $unit ? " ({$unit})" : '';
+    }
+}

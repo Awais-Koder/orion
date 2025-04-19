@@ -46,7 +46,7 @@ class PropertyValueFactory extends Factory
 
                     return match($property->type)
                     {
-                        PropertyTypeEnum::Choice => null,
+                        PropertyTypeEnum::Choice => $this->faker->numberBetween(0, 200),
                         PropertyTypeEnum::Option => $this->faker->randomElement([null, true, false]), // TODO High: Review if we allow null, or we only support a missing row acting as null.
                         PropertyTypeEnum::Slider => $this->faker->numberBetween(0, 100),
                         PropertyTypeEnum::Number => $this->faker->numberBetween(0, 100),
